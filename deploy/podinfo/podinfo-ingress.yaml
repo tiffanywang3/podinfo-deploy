@@ -2,7 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: podinfo
-  namespace: dev
+  namespace: default
   annotations:
     kubernetes.io/ingress.class: traefik
     traefik.frontend.rule.type: PathPrefixStrip
@@ -12,12 +12,12 @@ spec:
   tls:
     - secretName: ingress-certificate
       hosts:
-      - training-user-1.training.weave.works
+        - training-user-1.training.weave.works
   rules:
-  - host: training-user-1.training.weave.works
-    http:
-      paths:
-      - path: /podinfo
-        backend:
-          serviceName: podinfo
-          servicePort: 9898
+    - host: training-user-1.training.weave.works
+      http:
+        paths:
+          - path: /podinfo
+            backend:
+              serviceName: podinfo
+              servicePort: 9898

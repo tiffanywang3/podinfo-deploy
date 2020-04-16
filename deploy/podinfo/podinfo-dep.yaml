@@ -19,28 +19,44 @@ spec:
         prometheus.io/scrape: "true"
     spec:
       containers:
-        - name: podinfod
-          image: quay.io/stefanprodan/podinfo:3.1.5
-          command:
-            - ./podinfo
-            - --port=9898
-          ports:
-            - containerPort: 9898
-          readinessProbe:
-            httpGet:
-              path: /readyz
-              port: 9898
-            initialDelaySeconds: 1
-            periodSeconds: 5
-            failureThreshold: 1
-          livenessProbe:
-            httpGet:
-              path: /healthz
-              port: 9898
-            initialDelaySeconds: 1
-            periodSeconds: 10
-            failureThreshold: 2
-          resources:
-            requests:
-              memory: "32Mi"
-              cpu: "10m"
+      - name: podinfod
+        image: quay.io/stefanprodan/podinfo:3.1.5
+        command:
+        - ./podinfo
+        - --port=9898
+        ports:
+        - containerPort: 9898
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 9898
+          initialDelaySeconds: 1
+          periodSeconds: 5
+          failureThreshold: 1
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 9898
+          initialDelaySeconds: 1
+          periodSeconds: 10
+          failureThreshold: 2
+        resources:
+          requests:
+            memory: "32Mi"
+            cpu: "10m"
+        volumeMounts:
+        - mountPath: /data
+          name: storage
+      volumes:
+      - name: storage
+        persistentVolumeClaim:
+          claimName: mypvc
+      initContainers:
+      - name: install-busybox
+        image: busybox:latest
+        volumeMounts:
+        - name: storage
+          mountPath: /data
+        command: ["sh", "-c", "date", ">>", "/data/log.txt"]
+
+          

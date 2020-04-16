@@ -21,6 +21,7 @@ spec:
       containers:
         - name: podinfod
           image: quay.io/stefanprodan/podinfo:3.1.5
+          imagePullPolicy: IfNotPresent
           command:
             - ./podinfo
             - --port=9898
@@ -54,7 +55,13 @@ spec:
       initContainers:
         - name: init
           image: busybox:latest
+          imagePullPolicy: IfNotPresent
           volumeMounts:
             - name: storage
               mountPath: /demo
-          command: ["sh", "-c", "date >> /demo/log.txt"]
+          command:
+            [
+              "sh",
+              "-c",
+              "touch /demo/log.txt && chmod ugo=rw /demo/log.txt && date >> /demo/log.txt",
+            ]

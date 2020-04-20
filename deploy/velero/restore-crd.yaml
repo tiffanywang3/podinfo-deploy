@@ -5,7 +5,7 @@ kind: Restore
 # Standard Kubernetes metadata. Required.
 metadata:
   # Restore name. May be any valid Kubernetes object name. Required.
-  name: one-date
+  name: one-date-name
   # Restore namespace. Must be the namespace of the Velero server. Required.
   namespace: monitoring-system
 # Parameters about the restore. Required.
